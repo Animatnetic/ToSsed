@@ -5,7 +5,7 @@ async function get(url) {
     return fetch(url, {
         method: "GET", 
         headers: {
-            "Content-Type": "text/html"
+            "Content-Type": "application/json"
         }
     })
     .then((response) => response.json())
