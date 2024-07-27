@@ -1,5 +1,5 @@
 import os
-import ai71
+from ai71 import aI71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 
@@ -12,13 +12,16 @@ app = Flask(__name__)
 
 @app.route("/summarize")
 def home():
-    return client.chat.completions.create(
+    result = client.chat.completions.create(
         model=model_name, 
         messages=[
             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
             {"role": "user", "content": "Hello, what are you?"}
         ]
     )
+    print(result)
+
+    return result
 
 
 @app.errorhandler(404)
