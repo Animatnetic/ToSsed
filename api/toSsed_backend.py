@@ -13,24 +13,26 @@ client = AI71(API_KEY)
 
 @app.route("/summarize")
 def home():
-    result = []
+    # result = []
 
-    for outputChunk in client.chat.completions.create(
-        model=model_name, 
-        messages=[
-            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
-            {"role": "user", "content": "Hello, what are you?"}
-        ], 
-        stream=True
-    ):
-        if outputChunk.choices[0].delta.content:
-            result.append(outputChunk.choices[0].delta.content)
+    # for outputChunk in client.chat.completions.create(
+    #     model=model_name, 
+    #     messages=[
+    #         {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
+    #         {"role": "user", "content": "Hello, what are you?"}
+    #     ], 
+    #     stream=True
+    # ):
+    #     if outputChunk.choices[0].delta.content:
+    #         result.append(outputChunk.choices[0].delta.content)
     
-    result = "".join(result) # Parsing the array as a string
-    print(result)
-    print(type(result))
+    # result = "".join(result) # Parsing the array as a string
+    # print(result)
+    # print(type(result))
 
     # return jsonify({"result": result}), 200
+    print("Does it run fine if it returns wthout the api call")
+
     return jsonify({"result": "test-rest"}), 200
 
 
