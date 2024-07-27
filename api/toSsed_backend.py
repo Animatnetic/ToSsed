@@ -2,7 +2,6 @@ import os
 from ai71 import AI71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
-import requests
 
 load_dotenv() # Initializing dot environment variables
 API_KEY = os.getenv("AI71_API_KEY")
