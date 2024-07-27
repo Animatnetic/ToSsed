@@ -14,23 +14,18 @@ client = AI71(API_KEY)
 
 @app.route("/summarize", methods=["GET", "POST"])
 def home():
-    result = []
-
-    for outputChunk in client.chat.completions.create(
+    result = client.chat.completions.create(
         model=model_name, 
         messages=[
             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
             {"role": "user", "content": "Hello, what are you?"}
         ], 
-        stream=True
-    ):
-        if outputChunk.choices[0].delta.content:
-            result.append(outputChunk.choices[0].delta.content)
-    
-    result = "".join(result) # Parse array of results into a single string
+        stream=False
+    ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
 
     # request_json = requests.post(API_URL, 
     #     json={
+    #         "model": model_name,
     #         "messages": [
     #             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
     #             {"role": "user", "content": "Hello, what are you?"}
@@ -41,6 +36,9 @@ def home():
     #         "Authorization": f"Bearer {API_KEY}"
     #     }
     # )
+
+    # print(request_json)
+
     return jsonify({"result": result}), 200
 
 
