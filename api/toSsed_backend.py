@@ -4,10 +4,11 @@ from flask import Flask, jsonify
 from dotenv import load_dotenv
 
 load_dotenv() # Initializing dot environment variables
-api_key = os.getenv("AI71_API_KEY")
+API_KEY = os.getenv("AI71_API_KEY")
 model_name = "tiiuae/falcon-180B-chat"
 
 app = Flask(__name__)
+client = AI71(API_KEY)
 
 
 @app.route("/summarize")
