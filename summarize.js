@@ -3,7 +3,10 @@ let summarizeButton = document.getElementById("submitToS");
 
 async function get(url) {
     return fetch(url, {
-        method: "GET"
+        method: "GET", 
+        headers: {
+            "Content-Type": "application/json"
+        }
     })
     .then((response) => response.json())
     .catch((erorrMessage) => console.log("Internal error message from script:", erorrMessage));
