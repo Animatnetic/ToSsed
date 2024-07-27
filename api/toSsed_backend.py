@@ -10,9 +10,9 @@ API_URL = "https://api.ai71.ai/v1/chat/completions"
 
 app = Flask(__name__)
 model_name = "tiiuae/falcon-180b-chat"
-client = AI71(AI71_API_KEY)
+client = AI71(API_KEY)
 
-@app.route("/summarize")
+@app.route("/summarize", methods=["GET", "POST"])
 def home():
     result = []
 
