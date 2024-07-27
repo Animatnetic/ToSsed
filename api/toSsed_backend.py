@@ -1,4 +1,5 @@
 import os
+import ai71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 
@@ -9,9 +10,9 @@ api_key = os.getenv("AI71_API_KEY")
 app = Flask(__name__)
 
 
-@app.route("/api")
+@app.route("/summarize")
 def home():
-    return f"Hello World {api_key}", 200
+    return jsonify({"status": 200, "message": "This is a test for the GET request"}), 200
 
 
 @app.errorhandler(404)
