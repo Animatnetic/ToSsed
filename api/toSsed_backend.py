@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route("/api")
 def home():
-    return f"Hello World, {api_key}", 200
+    return "Hello World", 200
 
 
 @app.errorhandler(404)
