@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/api")
 def home():
     return "Hello world", 200 # Code 200 means sucess
 
