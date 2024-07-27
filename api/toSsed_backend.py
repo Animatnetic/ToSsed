@@ -1,9 +1,9 @@
 import os
 from flask import Flask, jsonify
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv() # Initializing dot environment variables
-# api_key = os.getenv("AI71_API_KEY")
+load_dotenv() # Initializing dot environment variables
+api_key = os.getenv("AI71_API_KEY")
 
 
 app = Flask(__name__)
