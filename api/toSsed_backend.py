@@ -2,14 +2,15 @@ import os
 from ai71 import AI71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
+import requests
 
 load_dotenv() # Initializing dot environment variables
 API_KEY = os.getenv("AI71_API_KEY")
-model_name = "tiiuae/falcon-180B-chat"
+API_URL = "https://api.ai71.ai/v1/chat/completions"
 
 app = Flask(__name__)
-client = AI71(API_KEY)
-
+model_name = "tiiuae/falcon-180b-chat"
+client = AI71(AI71_API_KEY)
 
 @app.route("/summarize")
 def home():
