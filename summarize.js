@@ -8,7 +8,10 @@ async function get(url) {
             "Content-Type": "application/json"
         }
     })
-    .then((response) => response.json())
+    .then((response) =>
+        console.log(response)
+        // response.json()
+    )
     .catch((erorrMessage) => console.log("Internal error message from script:", erorrMessage));
 };
 
