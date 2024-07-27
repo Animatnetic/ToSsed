@@ -24,10 +24,9 @@ def home():
         stream=True
     ):
         if outputChunk.choices[0].delta.content:
-            # result.append(outputChunk.choices[0].delta.content)
-            print(outputChunk.choices[0].delta.content, end="", sep="", end=True)
+            result.append(outputChunk.choices[0].delta.content)
     
-    # result = "".join(result) # Parsing the array as a string
+    result = "".join(result) # Parsing the array as a string
 
     return jsonify({"result": "test-result"}), 200
 
