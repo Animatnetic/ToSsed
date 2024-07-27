@@ -36,5 +36,5 @@ def page_not_found(error_message):
     return jsonify({"status": 404, "message": "Not Found"}), 404 # Error 404 code
 
 
-# if __name__ == "__main__":
-#     app.run()
+if __name__ == "__main__":
+    app.run()
