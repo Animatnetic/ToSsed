@@ -2,6 +2,7 @@ import os
 from ai71 import AI71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
+import requests
 
 load_dotenv() # Initializing dot environment variables
 API_KEY = os.getenv("AI71_API_KEY")
@@ -13,22 +14,34 @@ client = AI71(API_KEY)
 
 @app.route("/summarize", methods=["GET", "POST"])
 def home():
-    result = []
+    # result = []
 
-    for outputChunk in client.chat.completions.create(
-        model=model_name, 
-        messages=[
-            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
-            {"role": "user", "content": "Hello, what are you?"}
-        ], 
-        stream=True
-    ):
-        if outputChunk.choices[0].delta.content:
-            result.append(outputChunk.choices[0].delta.content)
+    # for outputChunk in client.chat.completions.create(
+    #     model=model_name, 
+    #     messages=[
+    #         {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
+    #         {"role": "user", "content": "Hello, what are you?"}
+    #     ], 
+    #     stream=True
+    # ):
+    #     if outputChunk.choices[0].delta.content:
+    #         result.append(outputChunk.choices[0].delta.content)
     
-    result = "".join(result) # Parse array of results into a single string
+    # result = "".join(result) # Parse array of results into a single string
 
-    return jsonify({"result": result}), 200
+    request_json = requests.post(API_URL, 
+        json={
+            "messages": [
+                {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
+                {"role": "user", "content": "Hello, what are you?"}
+            ]
+        },
+        headers={
+            "Content-Type": "application/json", 
+            "Authorization": f"Bearer {API_KEY}"
+        }
+    )
+    return request_json, 200
 
 
 @app.errorhandler(404)

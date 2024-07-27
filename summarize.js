@@ -28,7 +28,7 @@ async function post(url) {
 async function fetchSummary() {
     console.log("Button pressed");
 
-    let result = await post("https://tossed-away.vercel.app/summarize");
+    let result = await get("https://tossed-away.vercel.app/summarize");
     console.log(result);
 };
 
