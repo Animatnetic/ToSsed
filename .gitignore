@@ -12,3 +12,5 @@
 
 # This may appear, so I am making sure it is avoided.
 .DS_Store
+
+.venv
