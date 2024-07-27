@@ -1,5 +1,5 @@
 import os
-from ai71 import aI71
+from ai71 import AI71
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 
