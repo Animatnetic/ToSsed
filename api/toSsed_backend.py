@@ -22,7 +22,7 @@ def home():
     )
     print(result)
 
-    return result
+    return result, 200
 
 
 @app.errorhandler(404)
