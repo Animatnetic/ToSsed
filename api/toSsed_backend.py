@@ -28,7 +28,7 @@ def home():
     
     result = "".join(result) # Parsing the array as a string
 
-    return jsonify({"result": "test-result"}), 200
+    return jsonify({"result": result}), 200
 
 
 @app.errorhandler(404)
