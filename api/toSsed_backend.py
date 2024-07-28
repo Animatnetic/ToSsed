@@ -47,6 +47,7 @@ Terms of Service inputted part {chunk_index}: {text_input}
                 ]).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
                 
                 all_results.append(result_chunk)
+                all_results = "".join(all_results)
 
             return jsonify({"result": all_results}), 200
 
