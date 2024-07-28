@@ -39,11 +39,11 @@
     </nav>
 
     <section class="m-4">
-      <div >
+      <div>
         <div class="pb-3">
           <label for="inputTextField" class="form-label">Enter Terms of Service</label>
           <span style="float: inline-end;">
-            <button class="btn btn-primary" id="submitToS" href="summarize.html" role="button">Summarize</button>
+            <button class="btn btn-primary" id="submitToS" href="summarize.html" role="button" data-bs-toggle="modal" data-bs-target="#warningModal">Summarize</button>
           </span>
         </div>
         <textarea class="form-control" id="inputTextField"></textarea>
@@ -88,8 +88,34 @@
             </div>
           </div>
         </div>
+        <div class="alert alert-light" role="alert">
+          <div class="fw-bold">
+            Grade: <span class="badge text-bg-success">A</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex alert alert-warning" style="justify-content: space-evenly; margin-top: 10%;" role="alert">
+        Keep in mind, this is an artifical intelligent model so summaries or grading may not be correct.
       </div>
     </section>
+
+    <div class="modal" tabindex="-1" id="warningModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Attention!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>You sent a blank request, make sure to input something!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="viewportModeScript.js"></script>

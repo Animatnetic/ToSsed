@@ -1,5 +1,6 @@
 let summarizeButton = document.getElementById("submitToS");
 let inputtedText = document.getElementById("inputTextField");
+let warningModal = document.getElementById("warningModal");
 
 
 async function get(url) {
@@ -29,9 +30,24 @@ async function post(url) {
 async function fetchSummary() {
     console.log("Button pressed");
 
+
     let result = await get(`https://tossed-away.vercel.app/summarize?input=${inputtedText.value}`);
     console.log(result);
 };
 
 
 summarizeButton.onclick = fetchSummary;
+
+inputtedText.addEventListener("input", () => {
+    console.log("Input logged");
+
+    // data-bs-="modal" data-bs-target="#warningModal"
+
+    if (inputtedText.value == "") {
+        summarizeButton.setAttribute("data-bs-toggle", "modal");
+        summarizeButton.setAttribute("data-bs-target", "#warningModal");
+    } else {
+        summarizeButton.removeAttribute("data-bs-toggle", "modal");
+        summarizeButton.removeAttribute("data-bs-target", "#warningModal");
+    };
+});
