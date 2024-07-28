@@ -18,8 +18,6 @@ def home():
         text_input = request.args.get("input")
         
         all_results = []
-        # all_summary_headings = []
-        # all_extended_summaries = []
 
         if text_input == "" or text_input is None:
             return jsonify({"result": None}), 200 # Returning nothing has to not waste tokens/computation on empty inputs.
@@ -35,15 +33,18 @@ def home():
                         {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre"},
                         {"role": "user", "content":
                             f"""
-                            Give the following summary of the this inputted Terms of Service in the JSON structure below. Do note that the lenght of the arrays within this JSON are variable and can be changed as you see fit depending on the length of the summarized ToS. Within the key value pair of the JSON structure, always switch out the placeholder value with your input and only return a reply within this JSON strucutre and nothing else at all, no matter what is the input, the 3 dots represents data to be added:
+                            Give the following summary of the this inputted Terms of Service chunk in the JSON structure below:
 
                             {{
                                 "summary_title": "A brief summary of this part of the terms of service highlighting only the more unfair/concerning part of the ToS",
                                 "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service"
                             }}
+
+                            prompt: {chunk}
                             """
                 }]).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
                 
+                # return jsonify({"result": result_chunk},)
 
                 # Instead of returning whole JSON data, which may be more difficult for the AI, I will simply only return individual components.
 
@@ -52,39 +53,6 @@ def home():
             all_results = "".join(all_results)
 
             return jsonify({"results": all_results}), 200
-
-            #     summary_heading = client.chat.completions.create(
-            #         model=model_name, 
-            #         messages=[
-            #             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
-            #             {"role": "user", "content": f"Give a very simplified summary for this chunk read of the Terms of Service: {chunk}"}
-            #         ]
-            #     ).choices[0].message.content
-
-            #     extended_summary = client.chat.completions.create(
-            #         model=model_name, 
-            #            messages=[
-            #             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
-            #             {"role": "user", "content": f"Give an extended, more elaborate summary for this chunk read of the Terms of Service, include exact quotes for evidence from the ToS to backup your claim: {chunk}"}
-            #         ]
-            #     ).choices[0].message.content
-
-            #     all_summary_headings.append(summary_heading)
-            #     all_extended_summaries.append(extended_summary)
-
-            #     # print(all_results)
-            
-            # # grade_result
-
-            # grade = client.chat.completions.create(
-            #     model=model_name, 
-            #         messages=[
-            #         {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
-            #         {"role": "user", "content": f"Only output one letter,from A to E to grade the fairness of this ToS based off of these summary points: {" ".join(all_summary_headings)}"}
-            #     ]
-            # ).choices[0].message.content
-
-            # return jsonify({"summary_headings": all_summary_headings, "summary_extensions": all_extended_summaries, "grade": grade}), 200
 
 
 @app.errorhandler(404)
