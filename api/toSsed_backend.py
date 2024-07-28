@@ -44,11 +44,10 @@ def summarize_input():
                 # result_chunk = result_chunk[1:len(result_chunk)] # Removing that first empty character that is always strangely present on the completions message given by falcon
                 # result_chunk = json.loads(result_chunk) # Converting returned stirng into json, but can not return this directly as flask needs to return a specific Response object
 
-                # return jsonify({"summary_title": result_chunk["summary_title"], "summary_meaning": result_chunk["summary_meaning"]}), 200 # Unpacking dictionary into a json structure that is actually returned
-                    
-            all_results.append(result_chunk)
-            all_results = "".join(all_results)
+                # return jsonify({"summary_title": result_chunk["summary_title"], "summary_meaning": result_chunk["summary_meaning"]}), 200 # Unpacking dictionary into a json structure that is actually returned 
+                all_results.append(result_chunk)
 
+            all_results = "".join(all_results)
             all_results = all_results[1:len(all_results)]
             
             return jsonify({"summary_title": all_results["summary_title"], "summary_meaning": all_results["summary_meaning"]}), 200
