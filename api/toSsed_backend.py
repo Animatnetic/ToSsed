@@ -93,41 +93,41 @@ if __name__ == "__main__":
     app.run()
 
 
-f"""
-Analyze the following part of a medical report and extract key information.
-Return the results in a JSON format with the following structure:
-{{
-    "summary": "A brief summary of this part of the report",
-    "abnormal_results": [
-        {{"test_name": "Test Name", "value": "Abnormal Value", "reference_range": "Normal Range", "interpretation": "Brief interpretation"}}
-    ],
-    "charts": [
-        {{
-            "chart_type": "bar",
-            "title": "Chart Title",
-            "data": [
-                {{"label": "Category1", "value1": Number1, "value2": Number2, ...}},
-                {{"label": "Category2", "value1": Number1, "value2": Number2, ...}},
-                ...
-            ]
-        }},
-        {{
-            "chart_type": "area",
-            "title": "Chart Title",
-            "x_axis_key": "month",
-            "data_keys": ["value1", "value2", ...],
-            "data": [
-                {{"month": "January", "value1": Number1, "value2": Number2, ...}},
-                {{"month": "February", "value1": Number1, "value2": Number2, ...}},
-                ...
-            ],
-            "trend_percentage": 5.2,
-            "date_range": "January - June 2024"
-        }}
-    ],
-    "recommendations": ["Recommendation 1", "Recommendation 2", ...]
-}}
+# f"""
+# Analyze the following part of a medical report and extract key information.
+# Return the results in a JSON format with the following structure:
+# {{
+#     "summary": "A brief summary of this part of the report",
+#     "abnormal_results": [
+#         {{"test_name": "Test Name", "value": "Abnormal Value", "reference_range": "Normal Range", "interpretation": "Brief interpretation"}}
+#     ],
+#     "charts": [
+#         {{
+#             "chart_type": "bar",
+#             "title": "Chart Title",
+#             "data": [
+#                 {{"label": "Category1", "value1": Number1, "value2": Number2, ...}},
+#                 {{"label": "Category2", "value1": Number1, "value2": Number2, ...}},
+#                 ...
+#             ]
+#         }},
+#         {{
+#             "chart_type": "area",
+#             "title": "Chart Title",
+#             "x_axis_key": "month",
+#             "data_keys": ["value1", "value2", ...],
+#             "data": [
+#                 {{"month": "January", "value1": Number1, "value2": Number2, ...}},
+#                 {{"month": "February", "value1": Number1, "value2": Number2, ...}},
+#                 ...
+#             ],
+#             "trend_percentage": 5.2,
+#             "date_range": "January - June 2024"
+#         }}
+#     ],
+#     "recommendations": ["Recommendation 1", "Recommendation 2", ...]
+# }}
 
-Medical Report Part {i+1}/{len(chunks)}:
-{chunk}
-"""
+# Medical Report Part {i+1}/{len(chunks)}:
+# {chunk}
+# """
