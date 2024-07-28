@@ -49,6 +49,7 @@ def summarize_input():
 
             all_results = "".join(all_results)
             all_results = all_results[1:len(all_results)]
+            all_results = json.loads(all_results)
             
             return jsonify({"summary_title": all_results["summary_title"], "summary_meaning": all_results["summary_meaning"]}), 200
             # This is returning all in one go. Though, this may even exceed 1 minute response...
