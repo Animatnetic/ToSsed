@@ -24,27 +24,28 @@ def home():
 
     # ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
 
-    response_json = requests.post(API_URL, 
-        json={
-            "model": model_name,
-            "messages": [
-                {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
-                {"role": "user", "content": "Hello, what are you?"}
-            ]
-        },
-        headers={
-            "Content-Type": "application/json", 
-            "Authorization": f"Bearer {API_KEY}"
-        }
-    )
+    # response_json = requests.post(API_URL, 
+    #     json={
+    #         "model": model_name,
+    #         "messages": [
+    #             {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"}, 
+    #             {"role": "user", "content": "Hello, what are you?"}
+    #         ]
+    #     },
+    #     headers={
+    #         "Content-Type": "application/json", 
+    #         "Authorization": f"Bearer {API_KEY}"
+    #     }
+    # )
 
-    parsed_response = [_.decode("utf-8") for _ in response_json] # Parsing json into an array and making it not byte format
-    parsed_response = "".join(parsed_response) # Parsing the list into a single string of json
-    dictionary_response = json.loads(parsed_response) # Turning the json into a dictionary
+    # parsed_response = [_.decode("utf-8") for _ in response_json] # Parsing json into an array and making it not byte format
+    # parsed_response = "".join(parsed_response) # Parsing the list into a single string of json
+    # dictionary_response = json.loads(parsed_response) # Turning the json into a dictionary
 
-    result = dictionary_response["choices"][0]["message"]["content"] # Parsing the dictionary into a single string of the message output
-    return jsonify({"result": result}), 200
+    # result = dictionary_response["choices"][0]["message"]["content"] # Parsing the dictionary into a single string of the message output
+    # return jsonify({"result": result}), 200
 
+    return jsonify({"result": API_KEY}), 200
 
 @app.errorhandler(404)
 def page_not_found(error_message):
@@ -52,6 +53,5 @@ def page_not_found(error_message):
 
 
 if __name__ == "__main__":
-    # app.debug = True
-    # app.run()
-    home()
+    app.debug = True
+    app.run()
