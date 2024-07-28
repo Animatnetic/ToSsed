@@ -24,7 +24,21 @@ def home():
                 model=model_name, 
                 messages=[
                     {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. Along side this, you will grade the inputted ToS via the grading system a website called 'ToS; DR' uses."},
-                    {"role": "user", "content": "Hello, what are you?"}
+                    {"role": "user", "content":
+f"""
+Give the following summary of the this inputted Terms of Service in the JSON structure below. Do note that the lenght of the arrays within this JSON are variable and can be changed as you see fit depending on the length of the summarized ToS:
+{{
+    [
+    {{
+    "summary_title":"title here", 
+    "summary_meaning":"extension of the summary to elaborate it, including exact quotations from the ToS that you got the summary from"
+    }},
+    ],
+    "grade":"grade of ToS according to ToS;DR's grading system, letters from A to E"
+}}
+Terms of Service inputted part: {text_input}
+"""
+}
                 ], 
             ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
 
