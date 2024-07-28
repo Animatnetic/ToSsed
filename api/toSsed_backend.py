@@ -1,6 +1,6 @@
 import os
 from ai71 import AI71
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 
 load_dotenv() # Initializing dot environment variables
@@ -11,18 +11,25 @@ app = Flask(__name__)
 model_name = "tiiuae/falcon-180b-chat"
 client = AI71(API_KEY)
 
+
 @app.route("/summarize", methods=["GET", "POST"])
 def home():
-    result = client.chat.completions.create(
-        model=model_name, 
-        messages=[
-            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair"},
-            {"role": "user", "content": "Hello, what are you?"}
-        ], 
+    if request.method == "GET":
+        text_input = request.args.get("input")
 
-    ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
+        if text_input == "" or text_input is None:
+            return jsonify({"result": None}), 200 # Returning nothing has to not waste tokens/computation on empty inputs.
+        else:
+            result = client.chat.completions.create(
+                model=model_name, 
+                messages=[
+                    {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. Along side this, you will grade the inputted ToS via the grading system a website called 'ToS; DR' uses."},
+                    {"role": "user", "content": "Hello, what are you?"}
+                ], 
+            ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
 
-    return jsonify({"result": result}), 200
+            return jsonify({"result": result}), 200
+
 
 @app.errorhandler(404)
 def page_not_found(error_message):

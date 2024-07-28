@@ -1,4 +1,5 @@
 let summarizeButton = document.getElementById("submitToS");
+let inputtedText = document.getElementById("inputTextField");
 
 
 async function get(url) {
@@ -28,7 +29,7 @@ async function post(url) {
 async function fetchSummary() {
     console.log("Button pressed");
 
-    let result = await get("https://tossed-away.vercel.app/summarize");
+    let result = await get(`https://tossed-away.vercel.app/summarize?input=${inputtedTex.valuet}`);
     console.log(result);
 };
 
