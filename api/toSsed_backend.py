@@ -22,7 +22,7 @@ def home():
 
     ).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
 
-    return jsonify({"result": API_KEY}), 200
+    return jsonify({"result": result}), 200
 
 @app.errorhandler(404)
 def page_not_found(error_message):
