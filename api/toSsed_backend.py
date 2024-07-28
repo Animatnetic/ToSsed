@@ -6,7 +6,7 @@ from flask import Flask, jsonify
 from dotenv import load_dotenv
 
 load_dotenv() # Initializing dot environment variables
-API_KEY = os.getenv("AI71_API_KEY")
+API_KEY = os.environ.get("AI71_API_KEY")
 API_URL = "https://api.ai71.ai/v1/chat/completions"
 
 app = Flask(__name__)
