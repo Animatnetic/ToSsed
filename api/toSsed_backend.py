@@ -42,12 +42,14 @@ Give the following summary of the this inputted Terms of Service in the JSON str
     },
     "grade":"grade of ToS according to ToS;DR's grading system, letters from A to E..."
 }
-Terms of Service inputted part {chunk_index}: {text_input}
+Terms of Service inputted part {chunk_index}: {chunk}
 """}
                 ]).choices[0].message.content # Accessing the answer of the request in a non streaming manner as Vercel does not support this for python flask runtime
                 
                 all_results.append(result_chunk)
                 all_results = "".join(all_results)
+
+                print(all_results)
 
             return jsonify({"result": all_results}), 200
 
