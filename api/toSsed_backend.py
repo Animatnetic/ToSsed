@@ -27,29 +27,29 @@ async def summarize_input():
             max_chunk_size = 1500 # Tokens, in this case, is "characters"
             chunks = [text_input[i: i+max_chunk_size] for i in range(0, len(text_input), max_chunk_size)] # Breaks up the input into chunks of 1500 characters intervals to operate them individually
 
-            for chunk_index, chunk in enumerate(chunks):
 
-                headers = {
-                    "Content-Type": "application/json", 
-                    "Authorization": f"Bearer {API_KEY}"
-                }
+            async with aiohttp.ClientSession() as session: 
+                for chunk_index, chunk in enumerate(chunks):
 
-                payload = {
-                    "model": model_name, 
-                    "messages": [
-                    {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
-                    {"role": "user", "content":
-                        f"""
-                        Give the following summary of the this inputted Terms of Service in the JSON structure below:
+                    headers = {
+                        "Content-Type": "application/json", 
+                        "Authorization": f"Bearer {API_KEY}"
+                    }
 
-                        {{"summary_title": "A brief summary of this part of the terms of service highlighting only the more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
+                    payload = {
+                        "model": model_name, 
+                        "messages": [
+                        {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
+                        {"role": "user", "content":
+                            f"""
+                            Give the following summary of the this inputted Terms of Service in the JSON structure below:
 
-                        prompt: {chunk}
-                    """}
-                                ]
-                }
+                            {{"summary_title": "A brief summary of this part of the terms of service highlighting only the more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
 
-                async with aiohttp.ClientSession() as session: 
+                            prompt: {chunk}
+                        """}
+                                    ]
+                    }
                     async with session.post(API_URL, headers=headers, json=payload) as response:
                         result = await response.json()
 
