@@ -13,18 +13,12 @@ accordianDivContainer.setAttribute("id", "outputAccordion");
 let gradeElement = document.createElement("div");
 gradeElement.setAttribute("class", "alert alert-light");
 gradeElement.setAttribute("role", "alert");
-gradeElement.innerHTML = 
-`
-<div class="fw-bold">
-    Grade: <span class="badge"></span>
-</div>
-`;// class="text-bg-[variable colour depending on grade]"
 
 let alertElement = document.createElement("div");
 alertElement.setAttribute("class", "alert alert-warning d-flex");
 alertElement.setAttribute("style", "justify-content: center;");
 alertElement.setAttribute("role", "alert");
-alertElement.innerHTML = " Keep in mind, this is an artifical intelligent model so summaries or grading may be incorrect.";
+alertElement.innerText = " Keep in mind, this is an artifical intelligent model so summaries or grading may be incorrect.";
 
 
 async function get(url) {
@@ -52,6 +46,23 @@ async function post(url, payload) {
         console.log("Internal error message from script:", erorrMessage);
         alert("An unexpected error occured!");
     });
+};
+
+
+function chooseGradeColor(gradeText) {
+    if (gradeText == "A") {
+        return "success";
+    } else if (gradeText == "B") {
+        return "primary";
+    } else if (gradeText == "C") { 
+        return "info";
+    } else if (gradeText == "D") {
+        return "warning";
+    } else if (gradeText == "E") {
+        return "danger";
+    } else {
+        return "secondary";
+    };
 };
 
 
@@ -98,14 +109,25 @@ async function fetchSummary() {
             </div>
         </div>
         `;
-        // Do note, I set the data-bs-controls and aria-controls programmatically 
-        // try {
-        //     accordianDivContainer.insertAdjacentElement("beforeend", accordianElementTemplate);
-        // } catch {
-        //     console.log("Unable to set the gui as the request failed");
-        // };
+
         accordianDivContainer.insertAdjacentHTML("beforeend", accordianElement);
     };
+
+
+    let grade = result["grade"]
+
+    let clonedGradeElement = gradeElement.cloneNode();
+    clonedGradeElement.innerHTML = 
+    `
+    <div class="fw-bold">
+        Grade: <span class="badge text-bg-${chooseGradeColor(grade)}">${grade}</span>
+    </div>
+    `;// class="text-bg-[variable colour depending on grade]"
+
+    let clonedAlertElement = alertElement.cloneNode();
+
+    accordianDivContainer.insertAdjacentElement("beforeend", gradeElement);
+    accordianDivContainer.insertAdjacentElement("beforeend", clonedAlertElement);
 };
 
 
