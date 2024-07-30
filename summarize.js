@@ -28,10 +28,25 @@ async function post(url) {
 
 
 async function fetchSummary() {
+    summarizeButton.disabled = true;
     console.log("Button pressed");
 
+    let loadingElement = document.createElement("div");
+    loadingElement.innerHTML = 
+    `
+        <div>
+            <div class="spinner-border spinner-border-sm fs-3 m-1" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `;
+    summarizeButton.appendChild(loadingElement);
 
     let result = await get(`https://tossed-away.vercel.app/summarize?input=${inputtedText.value}`);
+    
+    // Allow the button to be pressed again, and remove the loading after the data has been retreived 
+    summarizeButton.removeChild(loadingElement);
+    summarizeButton.disabled = false;
     console.log(result);
 };
 
