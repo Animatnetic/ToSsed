@@ -45,7 +45,10 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
 
 # Extract only the response message given by falcon in a resuable, modular manner
 def extract_message(falcon_response_json):
-    return falcon_response_json["choices"][0]["message"]["content"]
+    response_message = falcon_response_json["choices"][0]["message"]["content"]
+    response_message = response_message[1:len(response_message)] # Removing the random blank character that always comes from the returned output
+
+    return response_message
 
 
 @app.route("/summarize", methods=["GET", "POST"])
@@ -67,11 +70,11 @@ async def summarize_input():
                 responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
                 
                 for response in responses:
-                    response_json = response.json()
+                    response_json = await response.json()
                     message_result = extract_message(response_json)
-                    summary_json = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon
+                    summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
 
-                    all_results.append(summary_json)
+                    all_results.append(summary_dict)
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
@@ -92,7 +95,6 @@ async def summarize_input():
                     grade_result_json = await grade_response.json()
 
                 grade = extract_message(grade_result_json)
-                grade = grade[1:len(grade)] # Remove blank text at the very start
             
             return jsonify({"all_summaries": all_results, "grade": grade}), 200
 
