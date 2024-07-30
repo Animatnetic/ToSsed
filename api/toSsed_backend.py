@@ -14,6 +14,39 @@ app = Flask(__name__)
 model_name = "tiiuae/falcon-180b-chat"
 client = AI71(API_KEY)
 
+headers = {
+    "Content-Type": "application/json", 
+    "Authorization": f"Bearer {API_KEY}"
+} # Headers used to define all communication with the falcon API
+
+
+def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchronously, side by side.
+    tasks = []
+
+    for chunkIndex, chunk in enumerate(chunks):
+        summary_chunk_payload = {
+            "model": model_name, 
+            "messages": [
+            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
+            {"role": "user", "content":
+                f"""
+                Give the following summary of the this inputted Terms of Service in the JSON structure below:
+
+                {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
+
+                prompt: {chunk}
+            """}]
+        }
+
+        tasks.append(session.post(API_URL, headers=headers, json=summary_chunk_payload))
+
+    return tasks
+
+
+# Extract only the response message given by falcon in a resuable, modular manner
+def extract_message(falcon_response_json):
+    return falcon_response_json["choices"][0]["message"]["content"]
+
 
 @app.route("/summarize", methods=["GET", "POST"])
 async def summarize_input():
@@ -25,40 +58,20 @@ async def summarize_input():
         else:
             all_results = []
             all_summary_titles = [] # Is considered by the Falcon to give a grading bsed on the titles of the most major/important points of the summarised ToS.
-            max_chunk_size = 1500 # Tokens, in this case, is "characters"
-            chunks = [text_input[i: i+max_chunk_size] for i in range(0, len(text_input), max_chunk_size)] # Breaks up the input into chunks of 1500 characters intervals to operate them individually
-
-            headers = {
-                "Content-Type": "application/json", 
-                "Authorization": f"Bearer {API_KEY}"
-            }
+            max_chunk_size = 500 # Tokens, in this case, is "characters"
+            chunks = [text_input[i: i+max_chunk_size] for i in range(0, len(text_input), max_chunk_size)] # Breaks up the input into chunks of 1500 characters intervals to operate them individuall
 
 
             async with aiohttp.ClientSession() as session: 
-                for chunk_index, chunk in enumerate(chunks):
-                    summary_chunk_payload = {
-                        "model": model_name, 
-                        "messages": [
-                        {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
-                        {"role": "user", "content":
-                            f"""
-                            Give the following summary of the this inputted Terms of Service in the JSON structure below:
+                tasks = get_tasks(chunks, session)
+                responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
+                
+                for response in responses:
+                    response_json = response.json()
+                    message_result = extract_message(response_json)
+                    summary_json = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon
 
-                            {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
-
-                            prompt: {chunk}
-                        """}
-                                    ]
-                    }
-                    async with session.post(API_URL, headers=headers, json=summary_chunk_payload) as response:
-                        result = await response.json()
-
-                    result_chunk = result["choices"][0]["message"]["content"]
-                    result_chunk = result_chunk[1:len(result_chunk)]
-                    result_chunk = json.loads(result_chunk)
-
-                    all_summary_titles.append(result_chunk["summary_title"])
-                    all_results.append(result_chunk)
+                    all_results.append(summary_json)
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
@@ -78,7 +91,7 @@ async def summarize_input():
                 async with session.post(API_URL, headers=headers, json=tos_grading_payload) as grade_response:
                     grade_result_json = await grade_response.json()
 
-                grade = grade_result_json["choices"][0]["message"]["content"]
+                grade = extract_message(grade_result_json)
                 grade = grade[1:len(grade)] # Remove blank text at the very start
             
             return jsonify({"all_summaries": all_results, "grade": grade}), 200
@@ -86,7 +99,7 @@ async def summarize_input():
 
 @app.errorhandler(404)
 def page_not_found(error_message):
-    return jsonify({"status": 404, "message": "Not Found"}), 404 # Error 404 code
+    return jsonify({"status": 404, "message": "Not Found"}), 404
 
 
 if __name__ == "__main__":
