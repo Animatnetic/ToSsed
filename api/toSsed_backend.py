@@ -25,7 +25,7 @@ async def summarize_input():
         else:
             all_results = []
             all_summary_titles = [] # Is considered by the Falcon to give a grading bsed on the titles of the most major/important points of the summarised ToS.
-            max_chunk_size = 1500 # Tokens, in this case, is "characters"
+            max_chunk_size = 500 # Tokens, in this case, is "characters"
             chunks = [text_input[i: i+max_chunk_size] for i in range(0, len(text_input), max_chunk_size)] # Breaks up the input into chunks of 1500 characters intervals to operate them individually
 
             headers = {
