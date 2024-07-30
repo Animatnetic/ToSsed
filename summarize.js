@@ -68,7 +68,7 @@ function chooseGradeColor(gradeText) {
 
 function removePriorOutput() {
    outputs = document.getElementById("outputAccordion");
-   document.removeChild(outputs);
+   summarizeSection.removeChild(outputs);
 }
 
 
