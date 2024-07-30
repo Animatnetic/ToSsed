@@ -7,8 +7,8 @@ let warningModal = document.getElementById("warningModal");
 let summarizeSection = document.querySelector("section");
 
 let accordianDivContainer = document.createElement("div");
-accordianDivContainer.setAttribute("class", "accordian");
-accordianDivContainer.setAttribute("id", "outputAccordian");
+accordianDivContainer.setAttribute("class", "accordion");
+accordianDivContainer.setAttribute("id", "outputAccordion");
 
 let gradeElement = document.createElement("div");
 gradeElement.setAttribute("class", "alert alert-light");
@@ -87,14 +87,14 @@ async function fetchSummary() {
         `
         <div class="accordion-item">
             <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="${accordianIdentifier}" aria-controls="${accordianIdentifier}">
-            ${result["all_summaries"][summaryPointIndex]["summary_title"]}
-            </button>
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordianIdentifier}" aria-expanded="false" aria-controls="#${accordianIdentifier}">
+                    ${result["all_summaries"][summaryPointIndex]["summary_title"]}
+                </button>
             </h2>
             <div id="${accordianIdentifier}" class="accordion-collapse collapse">
-            <div class="accordion-body">
-            ${result["all_summaries"][summaryPointIndex]["summary_meaning"]}
-            </div>
+                <div class="accordion-body">
+                    ${result["all_summaries"][summaryPointIndex]["summary_meaning"]}
+                </div>
             </div>
         </div>
         `;
