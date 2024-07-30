@@ -15,9 +15,10 @@ async function get(url) {
 };
 
 
-async function post(url) {
+async function post(url, payload) {
     return fetch(url, {
-        method: "POST", 
+        method: "POST",
+        json: payload,
         headers: {
             "Content-Type": "application/json"
         }
@@ -42,7 +43,8 @@ async function fetchSummary() {
     `;
     summarizeButton.appendChild(loadingElement);
 
-    let result = await get(`https://tossed-away.vercel.app/summarize?input=${inputtedText.value}`);
+    // let result = await get(`https://tossed-away.vercel.app/summarize?input=${inputtedText.value}`);
+    let result = await post("https://tossed-away.vercel.app/summarize", inputtedText.value);
     
     // Allow the button to be pressed again, and remove the loading after the data has been retreived 
     summarizeButton.removeChild(loadingElement);

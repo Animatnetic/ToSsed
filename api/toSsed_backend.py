@@ -17,8 +17,8 @@ client = AI71(API_KEY)
 
 @app.route("/summarize", methods=["GET", "POST"])
 async def summarize_input():
-    if request.method == "GET":
-        text_input = request.args.get("input")
+    if request.method == "POST":
+        text_input = request.data
 
         if text_input == "" or text_input is None:
             return jsonify({"result": None}), 200 # Returning nothing as to not waste tokens/computation on empty inputs.
