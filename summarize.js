@@ -79,7 +79,7 @@ async function fetchSummary() {
 
     summarizeSection.appendChild(accordianDivContainer);
 
-    for (let summaryPointIndex = 0; summaryPointIndex <= result["all_summaries"].length; summaryPointIndex ++) {
+    for (let summaryPointIndex = 0; summaryPointIndex < result["all_summaries"].length; summaryPointIndex ++) {
         // String template for creating accordian elements in a programmatic manner
         let accordianIdentifier = `collapse${summaryPointIndex}` // Uniquely identify each accordian element
 
