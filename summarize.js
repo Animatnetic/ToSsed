@@ -8,7 +8,6 @@ let summarizeSection = document.querySelector("section");
 
 let accordianDivContainer = document.createElement("div");
 accordianDivContainer.setAttribute("class", "accordion");
-accordianDivContainer.setAttribute("id", "outputAccordion");
 
 let gradeElement = document.createElement("div");
 gradeElement.setAttribute("class", "alert alert-light");
@@ -83,11 +82,9 @@ async function fetchSummary() {
     let loadingElement = document.createElement("div");
     loadingElement.innerHTML = 
     `
-        <div>
-            <div class="spinner-border spinner-border-sm fs-3 m-1" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
+    <div class="spinner-border spinner-border-sm fs-3 m-1" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
     `; // HTML for the loading screen
     summarizeButton.appendChild(loadingElement);
 
@@ -98,7 +95,10 @@ async function fetchSummary() {
     summarizeButton.removeChild(loadingElement);
     summarizeButton.disabled = false;
 
-    summarizeSection.appendChild(accordianDivContainer);
+    let clonedAccordionDivContainer = accordianDivContainer.cloneNode();
+    clonedAccordionDivContainer.setAttribute("id", "outputAccordion");
+
+    summarizeSection.appendChild(clonedAccordionDivContainer);
 
     for (let summaryPointIndex = 0; summaryPointIndex < result["all_summaries"].length; summaryPointIndex ++) {
         // String template for creating accordian elements in a programmatic manner
@@ -120,7 +120,7 @@ async function fetchSummary() {
         </div>
         `;
 
-        accordianDivContainer.insertAdjacentHTML("beforeend", accordianElement);
+        clonedAccordionDivContainer.insertAdjacentHTML("beforeend", accordianElement);
     };
 
 
@@ -136,8 +136,8 @@ async function fetchSummary() {
 
     let clonedAlertElement = alertElement.cloneNode(true);
 
-    accordianDivContainer.insertAdjacentElement("beforeend", clonedGradeElement);
-    accordianDivContainer.insertAdjacentElement("beforeend", clonedAlertElement);
+    clonedAccordionDivContainer.insertAdjacentElement("beforeend", clonedGradeElement);
+    clonedAccordionDivContainer.insertAdjacentElement("beforeend", clonedAlertElement);
 };
 
 
