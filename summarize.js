@@ -83,7 +83,7 @@ async function fetchSummary() {
         // String template for creating accordian elements in a programmatic manner
         let accordianIdentifier = `collapse${summaryPointIndex}` // Uniquely identify each accordian element
 
-        let accordianElementTemplate = 
+        let accordianElement = 
         `
         <div class="accordion-item">
             <h2 class="accordion-header">
@@ -99,11 +99,12 @@ async function fetchSummary() {
         </div>
         `;
         // Do note, I set the data-bs-controls and aria-controls programmatically 
-        try {
-            accordianDivContainer.insertAdjacentElement("beforeend", accordianElementTemplate);
-        } catch {
-            console.log("Unable to set the gui as the request failed");
-        };
+        // try {
+        //     accordianDivContainer.insertAdjacentElement("beforeend", accordianElementTemplate);
+        // } catch {
+        //     console.log("Unable to set the gui as the request failed");
+        // };
+        accordianDivContainer.insertAdjacentHTML("beforeend", accordianElement);
     };
 };
 
