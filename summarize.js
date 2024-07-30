@@ -76,6 +76,8 @@ async function fetchSummary() {
     summarizeButton.removeChild(loadingElement);
     summarizeButton.disabled = false;
 
+    summarizeSection.appendChild(accordianDivContainer);
+
     for (let summaryPointIndex = 0; summaryPointIndex <= result["all_summaries"].length; summaryPointIndex ++) {
         // String template for creating accordian elements in a programmatic manner
         let accordianIdentifier = `collapse${summaryPointIndex}` // Uniquely identify each accordian element
@@ -95,9 +97,12 @@ async function fetchSummary() {
             </div>
         </div>
         `;
-// Do note, I set the data-bs-controls and aria-controls programmatically 
-
-        accordianDivContainer.appendChild(accordianElementTemplate);
+        // Do note, I set the data-bs-controls and aria-controls programmatically 
+        try {
+            accordianDivContainer.insertAdjacentElement("beforeend", accordianElementTemplate);
+        } catch {
+            console.log("Unable to set the gui as the request failed");
+        };
     };
 };
 
