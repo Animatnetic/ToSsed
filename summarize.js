@@ -18,7 +18,7 @@ async function get(url) {
 async function post(url, payload) {
     return fetch(url, {
         method: "POST",
-        json: payload,
+        body: payload,
         headers: {
             "Content-Type": "application/json"
         }
