@@ -75,6 +75,7 @@ async def summarize_input():
                     summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
 
                     all_results.append(summary_dict)
+                    all_summary_titles.append(summary_dict["summary_title"])
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
