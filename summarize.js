@@ -71,6 +71,7 @@ async function fetchSummary() {
     summarizeButton.appendChild(loadingElement);
 
     let result = await post("https://tossed-away.vercel.app/summarize", inputtedText.value);
+    console.log(result);
     
     // Allow the button to be pressed again, and remove the loading after the data has been retreived 
     summarizeButton.removeChild(loadingElement);
