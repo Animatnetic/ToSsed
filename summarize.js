@@ -18,7 +18,7 @@ let alertElement = document.createElement("div");
 alertElement.setAttribute("class", "alert alert-warning d-flex");
 alertElement.setAttribute("style", "justify-content: center;");
 alertElement.setAttribute("role", "alert");
-alertElement.innerText = " Keep in mind, this is an artifical intelligent model so summaries or grading may be incorrect.";
+alertElement.innerText = "Keep in mind, this is an artifical intelligent model so summaries or grading may be incorrect.";
 
 
 async function get(url) {
@@ -66,9 +66,19 @@ function chooseGradeColor(gradeText) {
 };
 
 
+function removePriorOutput() {
+   outputs = document.getElementById("outputAccordion");
+   document.removeChild(outputs);
+}
+
+
 async function fetchSummary() {
     summarizeButton.disabled = true;
     console.log("Button pressed");
+
+    if (document.getElementById("outputAccordion")) {
+        removePriorOutput();
+    };
 
     let loadingElement = document.createElement("div");
     loadingElement.innerHTML = 
@@ -124,9 +134,9 @@ async function fetchSummary() {
     </div>
     `;// class="text-bg-[variable colour depending on grade]"
 
-    let clonedAlertElement = alertElement.cloneNode();
+    let clonedAlertElement = alertElement.cloneNode(true);
 
-    accordianDivContainer.insertAdjacentElement("beforeend", gradeElement);
+    accordianDivContainer.insertAdjacentElement("beforeend", clonedGradeElement);
     accordianDivContainer.insertAdjacentElement("beforeend", clonedAlertElement);
 };
 
