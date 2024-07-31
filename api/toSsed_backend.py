@@ -29,7 +29,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
                 f"""
                 Give the following summary of the this inputted Terms of Service in the JSON structure below:
 
-                {{"summary_point": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A very brief elaboration of this summary. Maximum 3 sentences, keep it concise and clear."}}
+                {{"summary_point": "A very brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS, make it a phrase long", "summary_meaning": "A brief elaboration of this summary. Maximum 3 sentences, keep it concise."}}
 
                 prompt: {chunk}
             """}], 
@@ -91,7 +91,7 @@ async def summarize_input():
                         {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
                         {"role": "user", "content":
                             f"""
-                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS titles..
+                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. Keep it realistic, such that the most common ToS scored on ToS; DR are Cs.
 
                             ToS summary overview: {" ".join(all_summary_points)}
                         """}
