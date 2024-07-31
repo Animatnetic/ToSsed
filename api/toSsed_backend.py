@@ -16,7 +16,7 @@ client = AI71(API_KEY)
 
 
 async def promptFalcon(chunk):
-    client.chat.completions.create(
+    return client.chat.completions.create(
     model=model_name, 
     messages=[
     {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
