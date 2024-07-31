@@ -38,7 +38,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
             """}]
         }
 
-        tasks.append(session.post(API_URL, headers=headers, json=summary_chunk_payload))
+        tasks.append(session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False))
 
     return tasks
 
@@ -70,12 +70,17 @@ async def summarize_input():
                 responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
                 
                 for response in responses:
-                    response_json = await response.json()
-                    message_result = extract_message(response_json)
-                    summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
+                    try:
+                        # Some sort of handling, currently skips responses that are rate limited
 
-                    all_results.append(summary_dict)
-                    all_summary_titles.append(summary_dict["summary_title"])
+                        response_json = await response.json()
+                        message_result = extract_message(response_json)
+                        summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
+
+                        all_results.append(summary_dict)
+                        all_summary_titles.append(summary_dict["summary_title"])
+                    finally:
+                        pass
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
@@ -92,7 +97,7 @@ async def summarize_input():
                     ]
                 }
             
-                async with session.post(API_URL, headers=headers, json=tos_grading_payload) as grade_response:
+                async with session.post(API_URL, headers=headers, json=tos_grading_payload, ssl=False) as grade_response:
                     grade_result_json = await grade_response.json()
 
                 grade = extract_message(grade_result_json)
