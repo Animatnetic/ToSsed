@@ -35,7 +35,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
             """}]
         }
         try:
-            post_request = session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False)
+            post_request = asyncio.create_task(session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False))
             tasks.append(post_request)
         except Exception as errorMessage:
             print("Error requesting chunk", chunkIndex, "| Message:", str(errorMessage))
