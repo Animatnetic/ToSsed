@@ -15,7 +15,7 @@ model_name = "tiiuae/falcon-180b-chat"
 client = AI71(API_KEY)
 
 
-def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchronously, side by side.
+def get_tasks(chunks): # Defining event loop of tasks to be ran asynchronously, side by side.
     tasks = []
 
     for chunkIndex, chunk in enumerate(chunks):
