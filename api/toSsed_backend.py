@@ -101,6 +101,7 @@ async def summarize_input():
                     grade_result_json = await grade_response.json()
 
                 grade = extract_message(grade_result_json)
+                print("".join(all_summary_titles))
             
             return jsonify({"all_summaries": all_results, "grade": grade}), 200
 
