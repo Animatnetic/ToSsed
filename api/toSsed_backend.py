@@ -89,10 +89,9 @@ async def summarize_input():
                         {"role": "system", "content": "You are a terms of service grader, giving only a letter or 'Ungraded' as a response to inputted ToS summary titles."},
                         {"role": "user", "content":
                             f"""
-                            ONLY OUTPUT ONE LETTER OR "Ungraded", nothing else
-                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS. (Or write "Ungraded" if it is not a valid ToS).
+                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS titles. (Or write "Ungraded" if not valid).
 
-                            ToS summary overview: {"".join(all_summary_titles)}
+                            ToS summary overview: {" ".join(all_summary_titles)}
                         """}
                     ]
                 }
