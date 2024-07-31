@@ -33,7 +33,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
 
                 prompt: {chunk}
             """}], 
-            "temperature": 0.1  # Setting a low temperatue for a very slightly varied response but one that is still focused.
+            "temperature": 0.01 # Only accepting the slightest of variation but still needs to be focused and consistent.
         }
         try:
             post_request = asyncio.create_task(session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False))
@@ -103,7 +103,7 @@ async def summarize_input():
                             ToS summary overview: {" ".join(all_summary_points)}
                         """}
                     ], 
-                    "temperature": 0.1 # Set a low temperature for grading as the 'fairness' of something is subjective, yet is low enough to still be focues to reality.
+                    "temperature": 0.05 # Set a low temperature for grading as the 'fairness' of something is subjective, yet is low enough to still be focues to reality.
                 }
             
                 async with session.post(API_URL, headers=headers, json=tos_grading_payload, ssl=False) as grade_response:
