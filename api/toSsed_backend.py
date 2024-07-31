@@ -79,7 +79,7 @@ async def summarize_input():
                         summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
 
                         all_results.append(summary_dict)
-                        all_summary_titles.append(summary_dict["summary_title"])
+                        all_summary_points.append(summary_dict["summary_point"])
                     except Exception as exceptionMessage:
                         print("Error processing chunk", index, "| Message:", str(exceptionMessage))
                         # Effectively just skips this chunks' summary, moving on to the next one.
@@ -102,6 +102,9 @@ async def summarize_input():
                     grade_result_json = await grade_response.json()
 
                 grade = extract_message(grade_result_json)
+
+
+                print(all_results)
             
             return jsonify({"all_summaries": all_results, "grade": grade}), 200
 
