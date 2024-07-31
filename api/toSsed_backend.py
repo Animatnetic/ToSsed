@@ -91,8 +91,7 @@ async def summarize_input():
 
             grade = extract_message(grade_response)
             
-            # return jsonify({"all_summaries": all_results, "grade": grade}), 200
-            return jsonify({"testing": grade_response}), 200
+            return jsonify({"all_summaries": all_results, "grade": grade}), 200
 
 
 @app.errorhandler(404)
