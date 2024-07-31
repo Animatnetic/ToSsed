@@ -42,7 +42,7 @@ def get_tasks(chunks): # Defining event loop of tasks to be ran asynchronously, 
     return tasks
 
 
-# # Extract only the response message given by falcon in a resuable, modular manner
+# Extract only the response message given by falcon in a resuable, modular manner
 def extract_message(falcon_response_object):
     response_message = falcon_response_object.choices[0].delta.content
     response_message = response_message[1:len(response_message)] # Removing the random blank character that always comes from the returned output
@@ -68,8 +68,9 @@ async def summarize_input():
             responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
             
             for response in responses:
-                message_result = extract_message(response)
-                summary_dict = json.loads(message_result) # After the parsed json of the response, I now need to parse the actual JSON summary given by falcon into a python dict
+                response_result = await response
+                message_result = extract_message(response_result)
+                summary_dict = json.loads(message_result) # parse the actual JSON summary given by falcon into a python dict
 
                 all_results.append(summary_dict)
                 all_summary_titles.append(summary_dict["summary_title"])
@@ -78,11 +79,10 @@ async def summarize_input():
             grade_response = client.chat.completions.create(
                 model=model_name, 
                 messages = [
-                    {"role": "system", "content": "You are a terms of service grader, giving only a letter or 'Ungraded' as a response to inputted ToS summary titles."},
+                    {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
                     {"role": "user", "content":
                         f"""
-                        ONLY OUTPUT ONE LETTER OR "Ungraded", nothing else
-                        Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS. (Or write "Ungraded" if it is not a valid ToS).
+                        Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of the summary points of this ToS. (Or write "Ungraded" if there is no valid input).
 
                         ToS summary overview: {"".join(all_summary_titles)}
                     """}
