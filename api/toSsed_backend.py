@@ -24,7 +24,7 @@ async def promptFalcon(chunk):
                 f"""
                 Give the following summary of the this inputted Terms of Service in the JSON structure below:
 
-                {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
+#                 {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
 
                 prompt: {chunk}
                 """}]
@@ -60,7 +60,7 @@ async def summarize_input():
             return jsonify({"result": None}), 200 # Returning nothing as to not waste tokens/computation on empty inputs.
         else:
             all_results = []
-            all_summary_titles = [] # Is considered by the Falcon to give a grading bsed on the titles of the most major/important points of the summarised ToS.
+            all_summary_titles = [] # Array for the summary to be considered by Falcon-180b to give a grading based on the titles of the most major/important points of the summarised ToS.
             max_chunk_size = 1500 # Tokens, in this case, is "characters"
             chunks = [text_input[i: i+max_chunk_size] for i in range(0, len(text_input), max_chunk_size)] # Breaks up the input into chunks of 1500 characters intervals to operate them individuall
 
