@@ -45,7 +45,7 @@ def get_tasks(chunks): # Defining event loop of tasks to be ran asynchronously, 
 
 # Extract only the response message given by falcon in a resuable, modular manner
 def extract_message(falcon_response_object):
-    response_message = falcon_response_object.choices[0].delta.content
+    response_message = falcon_response_object.choices[0].message.content
     response_message = response_message[1:len(response_message)] # Removing the random blank character that always comes from the returned output
 
     return response_message
@@ -68,12 +68,12 @@ async def summarize_input():
             tasks = get_tasks(chunks)
             responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
             
-            # for response in responses:
-            #     message_result = extract_message(response)
-            #     summary_dict = json.loads(message_result) # parse the actual JSON summary given by falcon into a python dict
+            for response in responses:
+                message_result = extract_message(response)
+                summary_dict = json.loads(message_result) # parse the actual JSON summary given by falcon into a python dict
 
-            #     all_results.append(summary_dict)
-            #     all_summary_titles.append(summary_dict["summary_title"])
+                all_results.append(summary_dict)
+                all_summary_titles.append(summary_dict["summary_title"])
 
             # A request for the grading of the inputted Terms of Service.
             grade_response = client.chat.completions.create(
@@ -87,9 +87,9 @@ async def summarize_input():
                         ToS summary overview: {"".join(all_summary_titles)}
                     """}
                 ]
-            ).choices[0].delta.content
+            )
 
-            # grade = extract_message(grade_response)
+            grade = extract_message(grade_response)
             
             # return jsonify({"all_summaries": all_results, "grade": grade}), 200
             return jsonify({"testing": grade_response}), 200
