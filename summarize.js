@@ -109,7 +109,7 @@ async function fetchSummary() {
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordianIdentifier}" aria-expanded="false" aria-controls="#${accordianIdentifier}">
-                    ${result["all_summaries"][summaryPointIndex]["summary_title"]}
+                    ${result["all_summaries"][summaryPointIndex]["summary_point"]}
                 </button>
             </h2>
             <div id="${accordianIdentifier}" class="accordion-collapse collapse">
