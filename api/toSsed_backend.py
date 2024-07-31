@@ -91,11 +91,19 @@ async def summarize_input():
                         {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
                         {"role": "user", "content":
                             f"""
-                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. Keep it realistic, such that the most common ToS scored on ToS; DR are Cs.
+                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. This is the basis of the classification system:
+                            A: Are the best terms of services: they treat you fairly, respect your rights and will not abuse your data.
+                            B: The terms of services are fair towards the user but they could be improved.
+                            C: The terms of service are okay but some issues need your consideration.
+                            D: The terms of service are very uneven or there are some important issues that need your attention.
+                            E: The terms of service raise very serious concerns.
+
+                            Ungraded: These are not even points of a Terms of Service.
 
                             ToS summary overview: {" ".join(all_summary_points)}
                         """}
-                    ]
+                    ], 
+                    "temperature": 0.1 # Set a low temperature for grading as the 'fairness' of something is subjective, yet is low enough to still be focues to reality.
                 }
             
                 async with session.post(API_URL, headers=headers, json=tos_grading_payload, ssl=False) as grade_response:
