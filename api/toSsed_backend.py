@@ -87,13 +87,12 @@ async def summarize_input():
                         ToS summary overview: {"".join(all_summary_titles)}
                     """}
                 ]
-            )
+            ).choices[0].delta.content
 
-
-            grade = extract_message(grade_response)
+            # grade = extract_message(grade_response)
             
             # return jsonify({"all_summaries": all_results, "grade": grade}), 200
-            return jsonify({"testing": grade}), 200
+            return jsonify({"testing": grade_response}), 200
 
 
 @app.errorhandler(404)
