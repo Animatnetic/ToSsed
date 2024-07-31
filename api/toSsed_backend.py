@@ -86,10 +86,10 @@ async def summarize_input():
                 tos_grading_payload = {
                     "model": model_name, 
                     "messages": [
-                        {"role": "system", "content": "You are a terms of service grader, giving only a letter or 'Ungraded' as a response to inputted ToS summary titles."},
+                        {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
                         {"role": "user", "content":
                             f"""
-                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS titles. (Or write "Ungraded" if not valid).
+                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness of this inputted ToS titles..
 
                             ToS summary overview: {" ".join(all_summary_titles)}
                         """}
