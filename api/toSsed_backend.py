@@ -34,8 +34,11 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
                 prompt: {chunk}
             """}]
         }
-
-        tasks.append(session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False))
+        try:
+            post_request = session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False)
+            tasks.append(post_request)
+        except Exception as errorMessage:
+            print("Error requesting chunk", chunkIndex, "| Message:", str(errorMessage))
 
     return tasks
 
@@ -66,7 +69,7 @@ async def summarize_input():
                 tasks = get_tasks(chunks, session)
                 responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
                 
-                for response in responses:
+                for index, response in enumerate(responses):
                     try:
                         # Some sort of handling, currently skips responses that are rate limited
 
@@ -77,7 +80,7 @@ async def summarize_input():
                         all_results.append(summary_dict)
                         all_summary_titles.append(summary_dict["summary_title"])
                     except Exception as exceptionMessage:
-                        
+                        print("Error processing chunk", index, "| Message:", str(exceptionMessage))
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
