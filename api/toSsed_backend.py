@@ -32,7 +32,8 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
                 {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
 
                 prompt: {chunk}
-            """}]
+            """}], 
+            "temperature": 0.1  # Setting a low temperatue for a very slightly varied response but one that is still focused.
         }
         try:
             post_request = asyncio.create_task(session.post(API_URL, headers=headers, json=summary_chunk_payload, ssl=False))
@@ -81,6 +82,7 @@ async def summarize_input():
                         all_summary_titles.append(summary_dict["summary_title"])
                     except Exception as exceptionMessage:
                         print("Error processing chunk", index, "| Message:", str(exceptionMessage))
+                        # Effectively just skips this chunks' summary, moving on to the next one.
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
@@ -100,7 +102,6 @@ async def summarize_input():
                     grade_result_json = await grade_response.json()
 
                 grade = extract_message(grade_result_json)
-                print("".join(all_summary_titles))
             
             return jsonify({"all_summaries": all_results, "grade": grade}), 200
 
