@@ -2,7 +2,6 @@ import os
 import json
 import asyncio
 import aiohttp
-from ai71 import AI71
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 
@@ -12,8 +11,6 @@ API_URL = "https://api.ai71.ai/v1/chat/completions"
 
 app = Flask(__name__)
 model_name = "tiiuae/falcon-180b-chat"
-client = AI71(API_KEY)
-
 headers = {
     "Content-Type": "application/json", 
     "Authorization": f"Bearer {API_KEY}"
@@ -79,8 +76,8 @@ async def summarize_input():
 
                         all_results.append(summary_dict)
                         all_summary_titles.append(summary_dict["summary_title"])
-                    finally:
-                        pass
+                    except Exception as exceptionMessage:
+                        
 
                 # A request for the grading of the inputted Terms of Service.
                 tos_grading_payload = {
