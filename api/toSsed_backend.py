@@ -16,19 +16,20 @@ client = AI71(API_KEY)
 
 
 async def promptFalcon(chunk):
-    return client.chat.completions.create(
-    model=model_name, 
-    messages=[
-    {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
-    {"role": "user", "content":
-        f"""
-        Give the following summary of the this inputted Terms of Service in the JSON structure below:
+    client.chat.completions.create(
+            model=model_name, 
+            messages=[
+            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
+            {"role": "user", "content":
+                f"""
+                Give the following summary of the this inputted Terms of Service in the JSON structure below:
 
-        {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
+                {{"summary_title": "A brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS", "summary_meaning": "A more in-depth elaboration of the summary and what it means, as well as the specific quotations sourced from the Terms of Service, ensure to incase in quotation marks to make those quotes explicit"}}
 
-        prompt: {chunk}
-        """}]
-    )
+                prompt: {chunk}
+                """}]
+            )
+
 
     # Turning the chat.completions.create() function into a coroutine
 
@@ -67,13 +68,12 @@ async def summarize_input():
             tasks = get_tasks(chunks)
             responses = await asyncio.gather(*tasks) # Unpacking all of the asynchronous requests to be executed roughly at the same time instead of waiting after each one is over.
             
-            for response in responses:
-                response_result = await response
-                message_result = extract_message(response_result)
-                summary_dict = json.loads(message_result) # parse the actual JSON summary given by falcon into a python dict
+            # for response in responses:
+            #     message_result = extract_message(response)
+            #     summary_dict = json.loads(message_result) # parse the actual JSON summary given by falcon into a python dict
 
-                all_results.append(summary_dict)
-                all_summary_titles.append(summary_dict["summary_title"])
+            #     all_results.append(summary_dict)
+            #     all_summary_titles.append(summary_dict["summary_title"])
 
             # A request for the grading of the inputted Terms of Service.
             grade_response = client.chat.completions.create(
@@ -92,7 +92,8 @@ async def summarize_input():
 
             grade = extract_message(grade_response)
             
-            return jsonify({"all_summaries": all_results, "grade": grade}), 200
+            # return jsonify({"all_summaries": all_results, "grade": grade}), 200
+            return jsonify({"testing": grade}), 200
 
 
 @app.errorhandler(404)
