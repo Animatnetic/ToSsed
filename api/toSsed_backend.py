@@ -14,7 +14,7 @@ model_name = "tiiuae/falcon-180b-chat"
 headers = {
     "Content-Type": "application/json", 
     "Authorization": f"Bearer {API_KEY}"
-} # Headers used to define all communication with the falcon API
+} # Headers used to define all communication with the falcon RESTful API
 
 
 def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchronously, side by side.
@@ -32,7 +32,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
                 {{"summary_point": "A very brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS, make it a phrase long", "summary_meaning": "A brief elaboration of this summary. Maximum 3 sentences, keep it concise."}}
 
                 prompt: {chunk}
-            """}], 
+            """}],
             "temperature": 0.01 # Only accepting the slightest of variation but still needs to be focused and consistent.
         }
         try:
@@ -91,19 +91,18 @@ async def summarize_input():
                         {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
                         {"role": "user", "content":
                             f"""
-                            Give a letter from A to E, like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. This is the basis of the classification system:
+                            Give a letter from A to E or the word "Ungraded", like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. This is the basis of the classification system:
                             A: Are the best terms of services: they treat you fairly, respect your rights and will not abuse your data.
                             B: The terms of services are fair towards the user but they could be improved.
                             C: The terms of service are okay but some issues need your consideration.
                             D: The terms of service are very uneven or there are some important issues that need your attention.
                             E: The terms of service raise very serious concerns.
-
                             Ungraded: These are not even points of a Terms of Service.
 
-                            ToS summary overview: {" ".join(all_summary_points)}
+                            Inputted ToS summary: {" ".join(all_summary_points)}
                         """}
                     ], 
-                    "temperature": 0.05 # Set a low temperature for grading as the 'fairness' of something is subjective, yet is low enough to still be focues to reality.
+                    "temperature": 0.05 # Set a low temperature for grading as the 'fairness' of something can be subjective, yet is low enough to still be focues to reality.
                 }
             
                 async with session.post(API_URL, headers=headers, json=tos_grading_payload, ssl=False) as grade_response:

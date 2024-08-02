@@ -72,8 +72,9 @@ function removePriorOutput() {
 
 
 async function fetchSummary() {
+    if (inputtedText.value == "") { return } // Client side validation with a format check so no computation is wasted for requests to the backend
+
     summarizeButton.disabled = true;
-    console.log("Button pressed");
 
     if (document.getElementById("outputAccordion")) {
         removePriorOutput();
