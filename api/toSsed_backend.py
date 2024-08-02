@@ -24,7 +24,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
         summary_chunk_payload = {
             "model": model_name, 
             "messages": [
-            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS, and only those more concerning ones"},
+            {"role": "system", "content": "You are a terms of service summarizer, pretty much, a legal expert to help normal people to understand key points of the ToS, especially those of which breach the user's rights and are most unfair. You only return data in JSON format with the value within the key value pair always edited as you see fit according to the inputted prompt. If they did not input a proper ToS, let them know within this JSON strucutre. Do not summarize everything, only the more concerning components of the ToS."},
             {"role": "user", "content":
                 f"""
                 Give the following summary of the this inputted Terms of Service in the JSON structure below:
@@ -47,7 +47,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
 # Extract only the response message given by falcon in a resuable, modular manner
 def extract_message(falcon_response_json):
     response_message = falcon_response_json["choices"][0]["message"]["content"]
-    response_message = response_message[1:len(response_message)] # Removing the random blank character that always comes from the returned output
+    response_message = response_message[1:len(response_message)] # Removing the first random blank character that always comes from the returned output
 
     return response_message
 
@@ -72,7 +72,7 @@ async def summarize_input():
                 
                 for index, response in enumerate(responses):
                     try:
-                        # Some sort of handling, currently skips responses that are rate limited
+                        # Some sort of handling, currently skips responses that are rate limited or that have an error in the outputted JSON from falcon
 
                         response_json = await response.json()
                         message_result = extract_message(response_json)
@@ -88,7 +88,7 @@ async def summarize_input():
                 tos_grading_payload = {
                     "model": model_name, 
                     "messages": [
-                        {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summary titles."},
+                        {"role": "system", "content": "You are a terms of service grader, giving only a letter as a response to inputted ToS summaries for their fairness."},
                         {"role": "user", "content":
                             f"""
                             Give a letter from A to E or the word "Ungraded", like the classification system of a website called ToS; DR, to grade the fairness/reasonability of this ToS. This is the basis of the classification system:
