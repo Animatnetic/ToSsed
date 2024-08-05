@@ -5,6 +5,7 @@ A user-rights initiative, powered by AI!
 
 ## Local Download Instructions
 Go to your terminal:
+<br/>
 <code>git clone https://github.com/Animatnetic/ToSsed/</code>
 
 Then, 
