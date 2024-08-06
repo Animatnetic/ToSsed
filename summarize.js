@@ -48,6 +48,7 @@ async function post(url, payload) {
 };
 
 
+// Set colour of grading text 
 function chooseGradeColor(gradeText) {
     if (gradeText == "A") {
         return "success";
@@ -63,6 +64,12 @@ function chooseGradeColor(gradeText) {
         return "secondary";
     };
 };
+
+
+// Set colour for the Accordian elements that house the summaries of the ToS
+function chooseAccordianColor() {
+
+}
 
 
 function removePriorOutput() {
@@ -120,6 +127,7 @@ async function fetchSummary() {
             </div>
         </div>
         `;
+        // Template string for the accordian element's HTML code to be added to the DOM
 
         clonedAccordionDivContainer.insertAdjacentHTML("beforeend", accordianElement);
     };
