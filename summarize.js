@@ -67,15 +67,46 @@ function chooseGradeColor(gradeText) {
 
 
 // Set colour for the Accordian elements that house the summaries of the ToS
-function chooseAccordianColor() {
+function chooseAccordianColor(severityText) {
+    if (severityText == "Severe") {
+        return "bg-danger-subtle";
+    } else if (severityText == "Moderate") {
+        return "bg-warning-subtle";
+    } else if (severityText == "Neutral") {
+        return "";
+    } else {
+        return ""; // The severity text is never expected to be anything other than Severe, Moderate or Neutral, so this is some sort of contingent error handling
+    };
 
-}
+    // empty string means it will resort to default coloring
+};
 
 
 function removePriorOutput() {
    outputs = document.getElementById("outputAccordion");
    summarizeSection.removeChild(outputs);
-}
+};
+
+
+function orderSummaryPoints(resultJson) {
+    // Summaries are ordered based on severity from "Severe" to "Neutral"
+    let severeSummaries = [];
+    let moderateSummaries = [];
+    let neutralSummaries = [];
+
+    for (let resultIndex = 0; resultIndex < length(resultJson); resultIndex ++ ) {
+        if (resultJson["severity"] == "Severe") {
+            severeSummaries.append(resultJson[resultIndex]);
+        } else if (resultJson["severity"] == "Moderate") {
+            moderateSummaries.append(resultJson[resultIndex]);
+        } else {
+            // This is for either explicitly neutral similarities or if there is an unexpected severity value
+            neutralSummaries.append(resultJson[resultIndex]);
+        };
+    };
+
+    return severeSummaries.concat(moderateSummaries, neutralSummaries) // Combining all of the summaries in order from Severe to Neutral
+};
 
 
 async function fetchSummary() {
@@ -98,6 +129,8 @@ async function fetchSummary() {
 
     let result = await post("https://tossed-away.vercel.app/summarize", inputtedText.value);
     console.log(result);
+
+    result = orderSummaryPoints(result);
     
     // Allow the button to be pressed again, and remove the loading after the data has been retreived 
     summarizeButton.removeChild(loadingElement);
@@ -110,13 +143,14 @@ async function fetchSummary() {
 
     for (let summaryPointIndex = 0; summaryPointIndex < result["all_summaries"].length; summaryPointIndex ++) {
         // String template for creating accordian elements in a programmatic manner
-        let accordianIdentifier = `collapse${summaryPointIndex}` // Uniquely identify each accordian element
+        let accordianIdentifier = `collapse${summaryPointIndex}`; // Uniquely identify each accordian element
+        let severity = result["severity"];
 
         let accordianElement = 
         `
-        <div class="accordion-item">
+        <div class="accordion-item ${chooseAccordianColor(severity)}">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordianIdentifier}" aria-expanded="false" aria-controls="#${accordianIdentifier}">
+                <button class="accordion-button collapsed ${chooseAccordianColor(severity)}" type="button" data-bs-toggle="collapse" data-bs-target="#${accordianIdentifier}" aria-expanded="false" aria-controls="${accordianIdentifier}">
                     ${result["all_summaries"][summaryPointIndex]["summary_point"]}
                 </button>
             </h2>
@@ -133,7 +167,7 @@ async function fetchSummary() {
     };
 
 
-    let grade = result["grade"]
+    let grade = result["grade"];
 
     let clonedGradeElement = gradeElement.cloneNode();
     clonedGradeElement.innerHTML = 
