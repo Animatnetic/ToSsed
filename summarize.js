@@ -94,7 +94,7 @@ function orderSummaryPoints(resultJson) {
     let moderateSummaries = [];
     let neutralSummaries = [];
 
-    for (let resultIndex = 0; resultIndex < length(resultJson); resultIndex ++ ) {
+    for (let resultIndex = 0; resultIndex < resultJson.length; resultIndex ++ ) {
         if (resultJson["severity"] == "Severe") {
             severeSummaries.append(resultJson[resultIndex]);
         } else if (resultJson["severity"] == "Moderate") {
