@@ -29,7 +29,7 @@ def get_tasks(chunks, session): # Defining event loop of tasks to be ran asynchr
                 f"""
                 Give the following summary of the this inputted Terms of Service in the JSON structure below:
 
-                {{"summary_point": "A very brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS, make it a phrase long", "summary_meaning": "A brief elaboration of this summary. Maximum 3 sentences, keep it concise."}}
+                {{"summary_point": "A very brief summary of this part of the terms of service highlighting only more unfair/concerning part of the ToS, make it a phrase long", "summary_meaning": "A brief elaboration of this summary. Maximum 3 sentences, keep it concise.", "severity": "The severity of this summary point's lack of fairness or how breaching is this of the users' rights. Can only output 'severe', 'moderate' or 'normal'"}}
 
                 prompt: {chunk}
             """}],
