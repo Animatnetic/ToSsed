@@ -96,12 +96,12 @@ function orderSummaryPoints(resultSummaries) {
 
     for (let resultIndex = 0; resultIndex < resultSummaries.length; resultIndex ++ ) {
         if (resultSummaries["severity"] == "Severe") {
-            severeSummaries.append(resultSummaries[resultIndex]);
+            severeSummaries.push(resultSummaries[resultIndex]);
         } else if (resultSummaries["severity"] == "Moderate") {
-            moderateSummaries.append(resultSummaries[resultIndex]);
+            moderateSummaries.push(resultSummaries[resultIndex]);
         } else {
             // This is for either explicitly neutral similarities or if there is an unexpected severity value
-            neutralSummaries.append(resultSummaries[resultIndex]);
+            neutralSummaries.push(resultSummaries[resultIndex]);
         };
     };
 
