@@ -95,9 +95,9 @@ function orderSummaryPoints(resultSummaries) {
     let neutralSummaries = [];
 
     for (let resultIndex = 0; resultIndex < resultSummaries.length; resultIndex ++ ) {
-        if (resultSummaries["severity"] == "Severe") {
+        if (resultSummaries[resultIndex]["severity"] == "Severe") {
             severeSummaries.push(resultSummaries[resultIndex]);
-        } else if (resultSummaries["severity"] == "Moderate") {
+        } else if (resultSummaries[resultIndex]["severity"] == "Moderate") {
             moderateSummaries.push(resultSummaries[resultIndex]);
         } else {
             // This is for either explicitly neutral similarities or if there is an unexpected severity value
@@ -128,9 +128,9 @@ async function fetchSummary() {
     summarizeButton.appendChild(loadingElement);
 
     let result = await post("https://tossed-away.vercel.app/summarize", inputtedText.value);
-    console.log(result);
 
     result["all_summaries"] = orderSummaryPoints(result["all_summaries"]);
+    console.log(result);
     
     // Allow the button to be pressed again, and remove the loading after the data has been retreived 
     summarizeButton.removeChild(loadingElement);
@@ -144,7 +144,7 @@ async function fetchSummary() {
     for (let summaryPointIndex = 0; summaryPointIndex < result["all_summaries"].length; summaryPointIndex ++) {
         // String template for creating accordian elements in a programmatic manner
         let accordianIdentifier = `collapse${summaryPointIndex}`; // Uniquely identify each accordian element
-        let severity = result["severity"];
+        let severity = result["all_summaries"][summaryPointIndex]["severity"];
 
         let accordianElement = 
         `
