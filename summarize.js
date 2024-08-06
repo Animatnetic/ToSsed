@@ -88,20 +88,20 @@ function removePriorOutput() {
 };
 
 
-function orderSummaryPoints(resultJson) {
+function orderSummaryPoints(resultSummaries) {
     // Summaries are ordered based on severity from "Severe" to "Neutral"
     let severeSummaries = [];
     let moderateSummaries = [];
     let neutralSummaries = [];
 
-    for (let resultIndex = 0; resultIndex < resultJson.length; resultIndex ++ ) {
+    for (let resultIndex = 0; resultIndex < resultSummaries.length; resultIndex ++ ) {
         if (resultJson["severity"] == "Severe") {
-            severeSummaries.append(resultJson[resultIndex]);
+            severeSummaries.append(resultSummaries[resultIndex]);
         } else if (resultJson["severity"] == "Moderate") {
-            moderateSummaries.append(resultJson[resultIndex]);
+            moderateSummaries.append(resultSummaries[resultIndex]);
         } else {
             // This is for either explicitly neutral similarities or if there is an unexpected severity value
-            neutralSummaries.append(resultJson[resultIndex]);
+            neutralSummaries.append(resultSummaries[resultIndex]);
         };
     };
 
@@ -130,7 +130,7 @@ async function fetchSummary() {
     let result = await post("https://tossed-away.vercel.app/summarize", inputtedText.value);
     console.log(result);
 
-    result = orderSummaryPoints(result);
+    result["all_summaries"] = orderSummaryPoints(result["all_summaries"]);
     
     // Allow the button to be pressed again, and remove the loading after the data has been retreived 
     summarizeButton.removeChild(loadingElement);
